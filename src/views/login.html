@@ -14,14 +14,47 @@
 
     <br />
 
-    <form action="/login" method="POST" style="text-align: center">
-      <input type="text" name="username" placeholder="Username" /><br /><br />
+    <div id="error-message" style="color: red; text-align: center"></div>
+
+    <form id="login-form" style="text-align: center">
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder="Username"
+      /><br /><br />
       <input
         type="password"
+        id="password"
         name="password"
         placeholder="Password"
       /><br /><br />
       <button type="submit">Submit</button>
     </form>
+
+    <script>
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          const response = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            document.getElementById("error-message").textContent =
+              errorData.message;
+          } else {
+            window.location.href = "/account";
+          }
+        });
+    </script>
   </body>
 </html>
