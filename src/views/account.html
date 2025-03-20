@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account</title>
+    <style>
+      body {
+        text-align: center;
+        font-family: Arial, sans-serif;
+      }
+      a {
+        text-decoration: none;
+        color: purple;
+        margin: 0 15px;
+        font-size: 18px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="welcomeText">Welcome</h1>
+    <a href="/">Home</a>
+    <a href="/logout">Logout</a>
+
+    <script>
+      // Fetch username from session and update the page
+      fetch("/get-user")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.username) {
+            document.getElementById("welcomeText").textContent =
+              "Welcome " + data.username;
+          } else {
+            window.location.href = "/login"; // Redirect if not logged in
+          }
+        })
+        .catch((error) => console.error("Error:", error));
+    </script>
+  </body>
+</html>
