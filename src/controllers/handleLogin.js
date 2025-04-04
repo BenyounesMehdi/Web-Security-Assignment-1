@@ -17,8 +17,8 @@ export default function handleLogin(req, res) {
 
   const userAttempts = failedAttempts[username];
 
-  // Check if the user is blocked (except for carlos)
-  if (username !== 'carlos' && userAttempts.blockedUntil && Date.now() < userAttempts.blockedUntil) {
+  // Check if the user is blocked
+  if (userAttempts.blockedUntil && Date.now() < userAttempts.blockedUntil) {
     const remainingTime = Math.ceil(
       (userAttempts.blockedUntil - Date.now()) / 1000
     );
@@ -30,8 +30,8 @@ export default function handleLogin(req, res) {
   // Check if username exists
   if (!users[username]) {
     userAttempts.count++;
-    if (username !== 'carlos' && userAttempts.count >= MAX_ATTEMPTS) {
-      userAttempts.blockedUntil = Date.now() + BLOCK_TIME;
+    if (userAttempts.count >= MAX_ATTEMPTS) {
+      userAttempts.blockedUntil = Date.now() + BLOCK_TIME; // Set block time
     }
     return res.status(401).json({ message: "Invalid username" });
   }
@@ -39,15 +39,16 @@ export default function handleLogin(req, res) {
   // Check credentials
   if (users[username] !== password) {
     userAttempts.count++;
-    if (username !== 'carlos' && userAttempts.count >= MAX_ATTEMPTS) {
-      userAttempts.blockedUntil = Date.now() + BLOCK_TIME;
+    if (userAttempts.count >= MAX_ATTEMPTS) {
+      userAttempts.blockedUntil = Date.now() + BLOCK_TIME; // Set block time
     }
     return res.status(401).json({ message: "Invalid password" });
   }
 
-  // Successful login - reset only this user's failed attempts
-  failedAttempts[username] = { count: 0, blockedUntil: null };
-  req.session.user = username;
+  for (const user in failedAttempts) {
+    failedAttempts[user] = { count: 0, blockedUntil: null };
+  }
 
+  req.session.user = username;
   return res.redirect("/account");
 }
