@@ -9,13 +9,14 @@ const BLOCK_TIME = 60000; // 1-minute block
 
 export default function handleLogin(req, res) {
   const { username, password } = req.body;
+  const clientIp = req.ip || req.connection.remoteAddress; // Get client IP
 
   // Initialize failed attempts for the user if not set
-  if (!failedAttempts[username]) {
-    failedAttempts[username] = { count: 0, blockedUntil: null };
+  if (!failedAttempts[clientIp]) {
+    failedAttempts[clientIp] = { count: 0, blockedUntil: null };
   }
 
-  const userAttempts = failedAttempts[username];
+  const userAttempts = failedAttempts[clientIp];
 
   // Check if the user is blocked
   if (userAttempts.blockedUntil && Date.now() < userAttempts.blockedUntil) {
@@ -45,10 +46,8 @@ export default function handleLogin(req, res) {
     return res.status(401).json({ message: "Invalid password" });
   }
 
-  for (const user in failedAttempts) {
-    failedAttempts[user] = { count: 0, blockedUntil: null };
-  }
-
+  failedAttempts[clientIp] = { count: 0, blockedUntil: null };
+  
   req.session.user = username;
   return res.redirect("/account");
 }
