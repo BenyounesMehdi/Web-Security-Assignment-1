@@ -7,12 +7,13 @@ import { authMiddleware } from "../middlewares/auth.js";
 import { getUser } from "../controllers/getUser.js";
 import account from "../controllers/account.js";
 import logout from "../controllers/logout.js";
+import chechAuthentication from "../middlewares/checkAuthentication.js";
 
 const router = Router();
 
 router.get("/", home);
 
-router.get("/login", login);
+router.get("/login", chechAuthentication, login);
 
 router.get("/download-passwords", downloadPasswords);
 
