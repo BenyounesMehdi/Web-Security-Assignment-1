@@ -1,5 +1,5 @@
 export function getUser(req, res) {
-  console.log("Session Data at /get-user:", req.session); // Debugging log
+  console.log("Session data :", req.session);
 
   if (req.session.user) {
     res.json({ username: req.session.user });

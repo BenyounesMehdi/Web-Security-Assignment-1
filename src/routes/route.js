@@ -20,7 +20,7 @@ router.post("/login", handleLogin);
 
 router.get("/account", authMiddleware, account);
 
-router.get("/get-user", getUser);
+router.get("/get-user", authMiddleware, getUser);
 
 router.get("/logout", logout);
 

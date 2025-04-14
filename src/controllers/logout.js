@@ -5,6 +5,6 @@ export default function logout(req, res) {
       return res.status(500).json({ message: "Error logging out" });
     }
     res.clearCookie("connect.sid"); // Clear session cookie
-    res.redirect("/"); // Redirect to login page after logout
+    res.redirect("/"); // Redirect to the home page after logout
   });
 }

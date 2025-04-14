@@ -1,6 +1,6 @@
 import express from "express";
 import session from "express-session";
-import cookieParser from "cookie-parser"; // ✅ Import cookie-parser
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import router from "./routes/route.js";
 
@@ -11,18 +11,18 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser()); // ✅ Use cookie-parser
+app.use(cookieParser());
 
 app.use(
   session({
-    secret: "supersecret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Change to true if using HTTPS
+      secure: false,
       httpOnly: true,
       sameSite: "lax",
-      maxAge: 600000, // ✅ Set session lifetime (10 minutes)
+      maxAge: 600000, // Set session lifetime (10 minutes)
     },
   })
 );
