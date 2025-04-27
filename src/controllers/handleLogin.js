@@ -19,14 +19,14 @@ export default function handleLogin(req, res) {
   const userAttempts = failedAttempts[clientIp];
 
   // Check if the user is blocked
-  if (userAttempts.blockedUntil && Date.now() < userAttempts.blockedUntil) {
+  /*if (userAttempts.blockedUntil && Date.now() < userAttempts.blockedUntil) {
     const remainingTime = Math.ceil(
       (userAttempts.blockedUntil - Date.now()) / 1000
     );
     return res.status(403).json({
       message: `Too many failed login attempts. Try again in ${remainingTime} seconds.`,
     });
-  }
+  }*/
 
   // Check if username exists
   if (!users[username]) {

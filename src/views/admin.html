@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: red; }
+        table { border-collapse: collapse; width: 50%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        a { color: blue; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>ADMIN PANEL</h1>
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Action</th>
+        </tr>
+        <tr>
+            <td>wiener</td>
+            <td><a href="/admin/delete?username=wiener" class="delete-link">Delete</a></td>
+        </tr>
+        <tr>
+            <td>carlos</td>
+            <td><a href="/admin/delete?username=carlos" class="delete-link">Delete</a></td>
+        </tr>
+    </table>
+
+    <script>
+        document.querySelectorAll('.delete-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                fetch(this.getAttribute('href'), {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.vulnerable) {
+                        // Show the bypass instructions
+                        alert('Vulnerability: You can bypass admin authentication using X-Original-URL header');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</body>
+</html>
